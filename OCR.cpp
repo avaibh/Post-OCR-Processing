@@ -11,9 +11,10 @@ using namespace std;
 void ocrword_to_correctword(std::string &left_str, std::string &right_str) {
 }
 */
-struct myclass {
+/*struct myclass {
   bool operator() (int i,int j) { return (i<j);}
 } myobject;
+*/
 //Edit Distance
 int editDistance(std::string word1, std::string word2)
 {
@@ -38,15 +39,20 @@ int editDistance(std::string word1, std::string word2)
     return t[l1][l2];
 }
 
-//function that takes dictionary and the left_word and find the top 10 edit distance and store it in a vector
-void ocrDict_sorting(std::ifstream &dict, std::string &left_str) {
-  std::vector<pair<string,int>> v_editDistance;
-  while (getline(dict, line))
-  {
-    v_editDistance.pushback( make_pair ( line , editDistance(line,left_str) ) );
+//function that takes dictionary and the left_word and return the top 10 edit distance as a vector
+std::vector< pair < int,string > > ocrDict_sorting(std::ifstream &dict, std::string &left_str) {
+  std::string line;
+  std::vector< pair <int, string> > v_editDistance;
+  while (getline(dict, line)){
+      v_editDistance.push_back( make_pair ( editDistance(line,left_str), line ) );
   }
-  std::sort(v_editDistance.begin(), v_editDistance.end(), myobject);
+  //std::sort(v_editDistance.begin(), v_editDistance.end(), myobject);
+  std::sort(v_editDistance.begin(), v_editDistance.end()); //sorting by edit distance
 
+  while(v_editDistance.size() > 10) { // top 10 edit distances only
+      v_editDistance.pop_back();
+  }
+  return v_editDistance;
 }
 
 int main () {
