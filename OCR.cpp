@@ -2,22 +2,15 @@
 #include <fstream>
 #include <cassert>
 #include <string>
+#include <string.h>
 #include <vector>
-#include <algorithm> //for sorting
+#include <algorithm> //for using sorting algorithm
 #include <map>
 using namespace std;
 
-/*Recursive function
-void ocrword_to_correctword(std::string &left_str, std::string &right_str) {
-}
-*/
-/*struct myclass {
-  bool operator() (int i,int j) { return (i<j);}
-} myobject;
-*/
 //Edit Distance
 int editDistance(std::string word1, std::string word2)
-{
+{ //function start
     int i, j, l1, l2, m;
     l1 = word1.length();
     l2 = word2.length();
@@ -37,38 +30,50 @@ int editDistance(std::string word1, std::string word2)
         }
     }
     return t[l1][l2];
-}
+} //function end
 
 //function that takes dictionary and the left_word and return the top 10 edit distance as a vector
-std::vector< pair < int,string > > ocrDict_sorting(std::ifstream &dict, std::string &left_str) {
-  std::string line;
+std::vector< pair < int,string > > ocrDict_sorting(std::ifstream &dict, std::string &left_str)
+{ //function start
+  std::string line, word;
   std::vector< pair <int, string> > v_editDistance;
   while (getline(dict, line)){
-      v_editDistance.push_back( make_pair ( editDistance(line,left_str), line ) );
+      dict >> word;
+      v_editDistance.push_back( make_pair ( editDistance(word,left_str), word ) );
   }
-  //std::sort(v_editDistance.begin(), v_editDistance.end(), myobject);
+
   std::sort(v_editDistance.begin(), v_editDistance.end()); //sorting by edit distance
 
-  while(v_editDistance.size() > 10) { // top 10 edit distances only
+  while (v_editDistance.size() > 10) { // top 10 edit distances only
       v_editDistance.pop_back();
   }
   return v_editDistance;
-}
+} //function end
 
+//Recursive function
+void ocrword_to_correctword(std::string &incorrect_word, std::ifstream &dict)
+{ //function start
+  std::string left_word, right_word, line, word;
+  std::vector< pair <int, string> > v_editDistance;
+
+  for (int i = 0; i <= strlen(incorrect_word.c_str()); i++) {
+    left_word = incorrect_word.substr(0,i);
+    right_word = incorrect_word.substr(i+1, strlen(incorrect_word.c_str()));
+      while (getline(dict, line)) {
+        dict >> word;
+        if ( left_word == word ) {
+          ocrword_to_correctword(right_word, dict);
+          return;
+        }
+      }
+       v_editDistance = ocrDict_sorting(dict, left_word);
+  }
+} //function end
+
+//main function
 int main () {
 
-  std::string incorrect_word; //Incorrect word in SLP1 format
-  std::string left_word, right_word;
-/*
-  for (int i = 0; i <= strlen(incorrect_word); i++) {
-    left_word = incorrect_word.substr(0,i);
-    right_word = incorrect_word.substr(i+1, strlen(incorrect_word));
-
-    if (left_word) {
-    }
-    ocrword_to_correctword(left_word, right_word);
-  }
-*/
+  std::string incorrect_ocrWord; //Incorrect word in SLP1 format
   std::string line;
   std::map<string, int> dict_map, confusion_map, sandhi_map;
   std::string word;
