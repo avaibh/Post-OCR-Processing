@@ -47,6 +47,7 @@ std::vector< pair < int,string > > ocrDict_sorting(std::ifstream &dict, std::str
   while (v_editDistance.size() > 10) { // top 10 edit distances only
       v_editDistance.pop_back();
   }
+  //std::cout << "I'm in vector function " << '\n';
   return v_editDistance;
 } //function end
 
@@ -62,6 +63,7 @@ void ocrword_to_correctword(std::string &incorrect_word, std::ifstream &dict)
       while (getline(dict, line)) {
         dict >> word;
         if ( left_word == word ) {
+          //std::cout << "I'm in left_word == word if " << '\n';
           ocrword_to_correctword(right_word, dict);
           return;
         }
@@ -93,6 +95,13 @@ int main () {
   else{
     std::cout << "file is not open" << '\n';
   }
+
+/* printing map of dictionary
+ * for (std::map<string,int>::iterator it=dict_map.begin(); it!=dict_map.end(); ++it)
+ * std::cout << it->first << " => " << it->second << '\n';
+ */
+
+  ocrword_to_correctword(incorrect_ocrWord, dict);
 
   //confusion file
   std::ifstream confusion("confusion.txt");
