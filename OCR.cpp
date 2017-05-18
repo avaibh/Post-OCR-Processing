@@ -51,20 +51,21 @@ void ocrword_to_correctword(string &incorrect_word, ifstream &dict)
 //main function
 int main () {
 
-  std::string incorrect_ocrWord; //Incorrect word in SLP1 format
-  std::string line;
-  std::map<string, int> dict_map, confusion_map, sandhi_map;
-  std::string word;
+  string incorrect_ocrWord; //Incorrect word in SLP1 format
+  string line;
+  map<string, int> dict_map, confusion_map, sandhi_map;
+  string word;
   int freq_word;
-
+  size_t totalFreq_Dict = 0;
   //dictionary file
-  std::ifstream dict("dictionary.txt");
-  if (dict.is_open()) {   //if file is open
+  std::ifstream dict("DataForVaibhav/Dict.txt");
+
+  if (dict.is_open())
+  {
     while (getline(dict, line))
     {
       dict >> word;
-      dict >> freq_word;
-      dict_map[word] = freq_word;
+      dict_map[word]++;
     }
     dict.close();
   }
@@ -72,14 +73,29 @@ int main () {
     std::cout << "file is not open" << '\n';
   }
 
-/* printing map of dictionary
+  for( map<string,int>::const_iterator eptr=dict_map.begin(); eptr!=dict_map.end(); eptr++)
+        {
+          totalFreq += (eptr->second) ;
+        }
+        //std::cout << totalFreq << '\n';
+        //std::cout << 1/totalFreq << '\n';
+
+  //for confusions.h file. Load confusions from train pairs
+  map<string, int> ConfPmap1;
+  loadConfusions("/* filename */",ConfPmap1);
+  printmapWFreq(ConfPmap1);
+  return 0;
+
+/*
+ *printing map of dictionary
  * for (std::map<string,int>::iterator it=dict_map.begin(); it!=dict_map.end(); ++it)
  * std::cout << it->first << " => " << it->second << '\n';
  */
 
   ocrword_to_correctword(incorrect_ocrWord, dict);
-
+/*
   //confusion file
+  size_t totalFreq_confusion = 0;
   std::ifstream confusion("confusion.txt");
 
   if (confusion.is_open()) {   //if file is open
@@ -95,7 +111,13 @@ int main () {
     std::cout << "file is not open" << '\n';
   }
 
+  for( map<string,int>::const_iterator eptr=confusion_map.begin(); eptr!=confusion_map.end(); eptr++)
+        {
+          totalFreq += (eptr->second) ;
+        }
+
   //sandhi file
+  size_t totalFreq_sandhi = 0;
   std::ifstream sandhi("sandhi.txt");
 
   if (sandhi.is_open()) {   //if file is open
@@ -110,6 +132,10 @@ int main () {
   else{ //if file is not open
       std::cout << "file is not open" << '\n';
   }
-
+  for( map<string,int>::const_iterator eptr=sandhi_map.begin(); eptr!=sandhi_map.end(); eptr++)
+        {
+          totalFreq += (eptr->second) ;
+        }
+*/
   return 0;
 }
