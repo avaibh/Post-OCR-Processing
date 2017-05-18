@@ -6,29 +6,29 @@
 #include <vector>
 #include <algorithm> //for using sorting algorithm
 #include <map>
+#include "editDistance.h"
+#include "confusions.h"
 using namespace std;
 
 //function that takes dictionary and the left_word and return the top 10 edit distance as a vector
-std::vector< pair < int,string > > ocrDict_sorting(std::ifstream &dict, std::string &left_str)
+vector< pair < int,string > > ocrDict_sorting(ifstream &dict, string &left_str)
 { //function start
-  std::string line, word;
-  std::vector< pair <int, string> > v_editDistance;
-  while (getline(dict, line)){
-      dict >> word;
-      v_editDistance.push_back( make_pair ( editDistance(word,left_str), word ) );
-  }
-
-  std::sort(v_editDistance.begin(), v_editDistance.end()); //sorting by edit distance
-
-  while (v_editDistance.size() > 10) { // top 10 edit distances only
-      v_editDistance.pop_back();
-  }
-  //std::cout << "I'm in vector function " << '\n';
-  return v_editDistance;
+    std::string line, word;
+    std::vector< pair <int, string> > v_editDistance;
+    while (getline(dict, line)){
+        dict >> word;
+        v_editDistance.push_back( make_pair ( editDistance(word,left_str), word ) );
+    }
+    std::sort(v_editDistance.begin(), v_editDistance.end()); //sorting by edit distance
+    while (v_editDistance.size() > 10) { // top 10 edit distances only
+        v_editDistance.pop_back();
+    }
+    //std::cout << "I'm in vector function " << '\n';
+    return v_editDistance;
 } //function end
 
 //Recursive function
-void ocrword_to_correctword(std::string &incorrect_word, std::ifstream &dict)
+void ocrword_to_correctword(string &incorrect_word, ifstream &dict)
 { //function start
   std::string left_word, right_word, line, word;
   std::vector< pair <int, string> > v_editDistance;
@@ -38,7 +38,7 @@ void ocrword_to_correctword(std::string &incorrect_word, std::ifstream &dict)
     right_word = incorrect_word.substr(i+1, strlen(incorrect_word.c_str()));
       while (getline(dict, line)) {
         dict >> word;
-        if ( left_word == word ) {
+        if ( left_word.compare(word) == 0 ) {
           //std::cout << "I'm in left_word == word if " << '\n';
           ocrword_to_correctword(right_word, dict);
           return;
@@ -82,7 +82,7 @@ int main () {
   //confusion file
   std::ifstream confusion("confusion.txt");
 
-  if (dict.is_open()) {   //if file is open
+  if (confusion.is_open()) {   //if file is open
     while (getline(confusion, line))
     {
       confusion >> word;
@@ -98,7 +98,7 @@ int main () {
   //sandhi file
   std::ifstream sandhi("sandhi.txt");
 
-  if (dict.is_open()) {   //if file is open
+  if (sandhi.is_open()) {   //if file is open
     while (getline(sandhi, line))
       {
         sandhi >> word;
