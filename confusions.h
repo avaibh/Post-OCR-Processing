@@ -21,7 +21,9 @@ bool isNonVowel(string ocrp){
 }
 
 void loadvectomap(vector<string> ConfP, map<string,int>& ConfPmap){
-for(size_t t = 0; t<ConfP.size(); t++) ConfPmap[ConfP[t]]++;
+    for(size_t t = 0; t< ConfP.size(); t++) {
+      ConfPmap[ConfP[t]]++;
+    }
 }
 
 std::string removeSpaces(string input)
@@ -168,7 +170,7 @@ void lcs(seq const & xs, seq const & ys, seq & an_lcs)
     set_lcs(xs.begin(), xs_in_lcs, back_inserter(an_lcs));
 }
 
-void findConfusions(std::string ocr, std::string correct, std::vector<std::string>& vec){
+void findConfusions(string ocr, string correct, vector<string>& vec){
     //vector<string> vec;
     //ocrp = “”; correctp = “”;
     // for( t = 0 t< s.size) // load ocrp correctp if t > 0 with substr(t-1,1)
@@ -179,12 +181,12 @@ void findConfusions(std::string ocr, std::string correct, std::vector<std::strin
     //ocrp = s1; correctp = s2;
 
     size_t sz = ocr.size();
-    std::string ocrp = "";
+    string ocrp = "";
     size_t t = 0;
     while(1){
-        std::string ocrn ="";
-        std::string correctn ="";
-        std::string s1 = ocr.substr(t,1), s2 = correct.substr(t,1);
+        string ocrn = "";
+        string correctn = "";
+        string s1 = ocr.substr(t,1), s2 = correct.substr(t,1);
         //cout << "t = " << t << " " << sz << endl;
         // deletion
         if(s2 == " ") {
@@ -200,9 +202,6 @@ void findConfusions(std::string ocr, std::string correct, std::vector<std::strin
             while(s1 != s2) {ocrn += s1; correctn += s2; t++;  if(t >= sz) break; s1 = ocr.substr(t,1); s2 = correct.substr(t,1);}
             if((ocrp != "")&&(isNonVowel(ocrp))) vec.push_back(removeSpaces(ocrp+ocrn) + " " + removeSpaces(ocrp+correctn));/*else if(t < sz) cout << "s " << ocrn + s1 << " " << correctn + s1<< endl;*/ else vec.push_back(removeSpaces(ocrn) + " " + removeSpaces(correctn));
         } else t++;
-
-
-
 
         ocrp = s1;
         if(t >= sz) break;
@@ -285,12 +284,12 @@ void appendConfusionsPairs(string str1, string str2, vector<string>& vec){
     */
     allignlcsnew(str1,str2,str3);
     removeEndCommonSpaces(str1,str2);
-
+/*
     std::cout << str1 << '\n';
     std::cout << str2 << '\n';
     std::cout << str3 << '\n';
     std::cout << "/---------/" << '\n';
-    
+*/
     findConfusions(str1,str2,vec);
     //return vec;
 
@@ -308,25 +307,12 @@ void loadConfusions(std::string fileName,map<string,int>& ConfPmap){
             //std::cout << str1 << '\n';
             //std::cout << str2 << '\n';
             myfile >> str2;
-          //  std::cout << str2 << '\n';
+           //std::cout << str2 << '\n';
+           //std::cout << "/* message */" << '\n';
             appendConfusionsPairs((str1),(str2),ConfP);//toslp1
             //cout << str1 << " " << str2 << endl;
            //vec.clear();
        }
-       /*
-       { string line;
-          while(getline(myfile,line))
-          {
-               //std::cout << str1 << '\n';
-               //std::cout << str2 << '\n';
-               istringstream s(line);
-               s >> str1; s >> str2;
-             //  std::cout << str2 << '\n';
-               appendConfusionsPairs((str1),(str2),ConfP);//toslp1
-               //cout << str1 << " " << str2 << endl;
-              //vec.clear();
-          }
-       */
        cout << ConfP.size() << " Confusions Loaded" << endl;
     }
     else cout <<"Error Confusions NOT Loaded" << endl;
@@ -334,8 +320,10 @@ void loadConfusions(std::string fileName,map<string,int>& ConfPmap){
 }
 
 void printmapWFreq(map<string,int>& m1){
-for( map<string,int>::const_iterator eptr=m1.begin(); eptr!=m1.end(); eptr++)
-               cout << (eptr->first) << " " <<(eptr->second) << endl;
+    for( map<string,int>::const_iterator eptr=m1.begin(); eptr!=m1.end(); eptr++)
+          {
+             cout << (eptr->first) << " " <<(eptr->second) << endl;
+          }
 }
 
 int main() {
