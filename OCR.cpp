@@ -28,10 +28,22 @@ vector< pair < int,string > > ocrDict_sorting(ifstream &dict, string &left_str)
 } //function end
 
 //Recursive function
-void ocrword_to_correctword(string &incorrect_word, ifstream &dict)
+string ocrword_to_correctword(string &incorrect_word, ifstream &dict)
 { //function start
-  std::string left_word, right_word, line, word;
-  std::vector< pair <int, string> > v_editDistance;
+  string left_word, right_word, line, word;
+  vector< pair <int, string> > v_editDistance;
+  int flag = 0;
+
+  while (getline(dict, line)){
+    dict >> word;
+    if (incorrect_ocrWord.compare(word) == 0) flag = 1; else flag =0;
+  }
+
+  if (flag == 1) {
+    /* code */
+  }else{
+
+  }
 
   for (int i = 0; i <= strlen(incorrect_word.c_str()); i++) {
     left_word = incorrect_word.substr(0,i);
@@ -51,10 +63,8 @@ void ocrword_to_correctword(string &incorrect_word, ifstream &dict)
 //main function
 int main () {
 
-  string incorrect_ocrWord; //Incorrect word in SLP1 format
-  string line;
   map<string, int> dict_map, confusion_map, sandhi_map;
-  string word;
+  string word, line;
   int freq_word;
   size_t totalFreq_Dict = 0;
   //dictionary file
@@ -67,7 +77,6 @@ int main () {
       dict >> word;
       dict_map[word]++;
     }
-    dict.close();
   }
   else{
     std::cout << "file is not open" << '\n';
@@ -79,20 +88,19 @@ int main () {
         }
         //std::cout << totalFreq << '\n';
         //std::cout << 1/totalFreq << '\n';
-
-  //for confusions.h file. Load confusions from train pairs
-  map<string, int> ConfPmap1;
-  loadConfusions("/* filename */",ConfPmap1);
-  printmapWFreq(ConfPmap1);
-  return 0;
-
 /*
  *printing map of dictionary
  * for (std::map<string,int>::iterator it=dict_map.begin(); it!=dict_map.end(); ++it)
  * std::cout << it->first << " => " << it->second << '\n';
  */
 
-  ocrword_to_correctword(incorrect_ocrWord, dict);
+ //for confusions.h file. Load confusions from train pairs
+ map<string, int> ConfPmap1;
+ loadConfusions("DataForVaibhav/TrainPairs.txt",ConfPmap1);
+ printmapWFreq(ConfPmap1);
+
+ string ocrWord, correctWord; //Incorrect word in SLP1 format
+
 /*
   //confusion file
   size_t totalFreq_confusion = 0;
