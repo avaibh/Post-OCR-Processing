@@ -10,6 +10,12 @@
 #include "confusions.h"
 using namespace std;
 
+/*
+    MAKE A FUNCTION TO FIND PROBABILITY OF TOP 10 EDIT DISTANCES BY COMPARING WITH COMFUSION MAP OF TRAIN PAIRS
+
+*/
+
+//function to load confusions
 void loadNewConfusions(string& left_str, vector< pair <int, string> >& v_editDistance ,map<string,int>& lw_ConfPmap){
     vector<string> lw_ConfP;
     string str1, str2;
@@ -24,15 +30,15 @@ void loadNewConfusions(string& left_str, vector< pair <int, string> >& v_editDis
             //cout << str1 << " " << str2 << endl;
            //vec.clear();
        }
-       std::cout << "new confusions loop enetered " << '\n';
+       //std::cout << "new confusions loop enetered " << '\n';
 
     loadvectomap(lw_ConfP,lw_ConfPmap);
 }
 
 //function that takes dictionary and the left_word and return the top 10 edit distance as a vector
-void ocrDict_sorting(ifstream &dict, string &left_str, map<string,int>& lw_ConfPmap)
+void load_editDistance(ifstream& dict, string& left_str, map<string,int>& lw_ConfPmap)
 {
-    std::string line, word;
+    string line, word;
     vector< pair <int, string> > v_editDistance;
     while (getline(dict, line)){
         dict >> word;
@@ -43,7 +49,7 @@ void ocrDict_sorting(ifstream &dict, string &left_str, map<string,int>& lw_ConfP
         v_editDistance.pop_back();
     }
     //std::cout << "I'm in vector function " << '\n';
-    // loadNewConfusions( left_str,v_editDistance, map );
+    loadNewConfusions( left_str,v_editDistance, lw_ConfPmap );
 }
 
 //Recursive function
@@ -77,7 +83,7 @@ string ocrword_to_correctword(string &incorrect_word, ifstream &dict)
           if (flag == 1) {
             //ocrword_to_correctword(right_word, dict);
           }else {
-          ocrDict_sorting(dict, left_word, lw_ConfPmap);
+          load_editDistance(dict, left_word, lw_ConfPmap);
         }
       }
    }
@@ -89,9 +95,9 @@ int main () {
   map<string, int> dict_map, confusion_map, sandhi_map;
   string word, line;
   int freq_word;
-  size_t totalFreq_Dict = 0;
+  float totalFreq_Dict = 0;
   //dictionary file
-  std::ifstream dict("DataForVaibhav/Dict.txt");
+  std::ifstream dict("Data/Dict.txt");
 
   if (dict.is_open())
   {
@@ -109,8 +115,8 @@ int main () {
         {
           totalFreq_Dict += (eptr->second) ;
         }
-        //std::cout << totalFreq << '\n';
-        //std::cout << 1/totalFreq << '\n';
+        std::cout << totalFreq_Dict << '\n';
+        std::cout << 1/totalFreq_Dict << '\n';
 /*
  *printing map of dictionary
  * for (std::map<string,int>::iterator it=dict_map.begin(); it!=dict_map.end(); ++it)
@@ -124,6 +130,7 @@ int main () {
 
  string ocrWord, correctWord; //Incorrect word in SLP1 format
  correctWord = ocrword_to_correctword(ocrWord, dict);
+ std::cout << correctWord << '\n';
 /*
   //confusion file
   size_t totalFreq_confusion = 0;
