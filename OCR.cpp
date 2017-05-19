@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <fstream>
 #include <cassert>
 #include <string>
@@ -6,6 +7,7 @@
 #include <vector>
 #include <algorithm> //for using sorting algorithm
 #include <map>
+#include <unordered_map>
 #include "editDistance.h"
 #include "confusions.h"
 using namespace std;
@@ -13,7 +15,7 @@ using namespace std;
 /*
     MAKE A FUNCTION TO FIND PROBABILITY OF TOP 10 EDIT DISTANCES BY COMPARING WITH COMFUSION MAP OF TRAIN PAIRS
 
-*/
+
 
 //function to load confusions
 void loadNewConfusions(string& left_str, vector< pair <int, string> >& v_editDistance ,map<string,int>& lw_ConfPmap){
@@ -34,7 +36,7 @@ void loadNewConfusions(string& left_str, vector< pair <int, string> >& v_editDis
 
     loadvectomap(lw_ConfP,lw_ConfPmap);
 }
-
+*/
 //function that takes dictionary and the left_word and return the top 10 edit distance as a vector
 void load_editDistance(ifstream& dict, string& left_str, map<string,int>& lw_ConfPmap)
 {
@@ -49,7 +51,7 @@ void load_editDistance(ifstream& dict, string& left_str, map<string,int>& lw_Con
         v_editDistance.pop_back();
     }
     //std::cout << "I'm in vector function " << '\n';
-    loadNewConfusions( left_str,v_editDistance, lw_ConfPmap );
+    //loadNewConfusions( left_str,v_editDistance, lw_ConfPmap );
 }
 
 //Recursive function
@@ -67,26 +69,26 @@ string ocrword_to_correctword(string &incorrect_word, ifstream &dict)
   if (flag == 1) { //if incorrect_word is in dictionary
     return incorrect_word;
   }else{
-      flag = 0;
-      for (size_t i = 2; i <= strlen(incorrect_word.c_str()); i++) {
-          left_word = incorrect_word.substr(0,i);
-          right_word = incorrect_word.substr(i, strlen(incorrect_word.c_str()));
+    flag = 0;
+    for (size_t i = 2; i <= strlen(incorrect_word.c_str()); i++) {
+        left_word = incorrect_word.substr(0,i);
+        right_word = incorrect_word.substr(i, strlen(incorrect_word.c_str()));
 
-          while (getline(dict, line)) {
-            dict >> word;
-            if ( left_word.compare(word) == 0 ) {
-              //std::cout << "I'm in left_word == word if " << '\n';
-              flag = 1;
-            //  return a string to main
-            }else flag =0;
-          }
-          if (flag == 1) {
-            //ocrword_to_correctword(right_word, dict);
-          }else {
-          load_editDistance(dict, left_word, lw_ConfPmap);
+        while (getline(dict, line)) {
+          dict >> word;
+          if ( left_word.compare(word) == 0 ) {
+            //std::cout << "I'm in left_word == word if " << '\n';
+            flag = 1;
+          //  return a string to main
+          }else flag =0;
         }
+        if (flag == 1) {
+          //ocrword_to_correctword(right_word, dict);
+        }else {
+        load_editDistance(dict, left_word, lw_ConfPmap);
       }
-   }
+    }
+ }
 }
 
 float load_totalFreq(map<string, int>& m2){
@@ -119,14 +121,14 @@ int main () {
     std::cout << "file is not open" << '\n';
   }
   totalFreqDict = load_totalFreq(dict_map);
-  std::cout << totalFreqDict << '\n';
-  std::cout << 1/totalFreqDict << '\n';
+  //std::cout << totalFreqDict << '\n';
+  //std::cout << 1/totalFreqDict << '\n';
 
  //for confusions.h file. Load confusions from train pairs
  map<string, int> ConfPmap1;
- loadConfusions("DataForVaibhav/TrainPairs.txt",ConfPmap1);
+ loadConfusions("Data/TrainPairs.txt",ConfPmap1);
  totalFreqConfusion = load_totalFreq(ConfPmap1);
-  std::cout << totalFreqConfusion << '\n';
+ //std::cout << 1/totalFreqConfusion << '\n';
  //printmapWFreq(ConfPmap1);
 
  string ocrWord, correctWord; //Incorrect word in SLP1 format
