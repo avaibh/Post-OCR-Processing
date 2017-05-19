@@ -14,8 +14,7 @@ using namespace std;
 
 /*
     MAKE A FUNCTION TO FIND PROBABILITY OF TOP 10 EDIT DISTANCES BY COMPARING WITH COMFUSION MAP OF TRAIN PAIRS
-
-
+*/
 
 //function to load confusions
 void loadNewConfusions(string& left_str, vector< pair <int, string> >& v_editDistance ,map<string,int>& lw_ConfPmap){
@@ -36,7 +35,7 @@ void loadNewConfusions(string& left_str, vector< pair <int, string> >& v_editDis
 
     loadvectomap(lw_ConfP,lw_ConfPmap);
 }
-*/
+
 //function that takes dictionary and the left_word and return the top 10 edit distance as a vector
 void load_editDistance(ifstream& dict, string& left_str, map<string,int>& lw_ConfPmap)
 {
@@ -126,7 +125,7 @@ int main () {
 
  //for confusions.h file. Load confusions from train pairs
  map<string, int> ConfPmap1;
- loadConfusions("Data/TrainPairs.txt",ConfPmap1);
+ loadConfusions("/Users/vaibhavagrawal/Desktop/OCR word correction/Data/TrainPairs.txt",ConfPmap1);
  totalFreqConfusion = load_totalFreq(ConfPmap1);
  //std::cout << 1/totalFreqConfusion << '\n';
  //printmapWFreq(ConfPmap1);
