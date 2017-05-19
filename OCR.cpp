@@ -11,7 +11,29 @@
 #include "editDistance.h"
 #include "confusions.h"
 using namespace std;
+/*
+lw = left_word
+tp = train pairs
+*/
 
+/*
+A Funtion that finds the corresponding probability for the confusions of the pairs taken from top 10 edit distances
+with respect to the train pairs' confusions
+*/
+void loadProb_editDistance(map<string,int>& lw_map, map<string,float>& tp_map, float totalP ){
+  for (map<string,int>::const_iterator i=lw_map.begin(); i!=lw_map.end(); i++) {
+    for( map<string,float>::const_iterator j=tp_map.begin(); j!=tp_map.end(); j++ ){
+
+      if ((j->first).compare((i->first)) == 0) {
+        // lw_m2[(i->first)]= (j->second);
+        totalP *= (j->second);
+      }
+      else{
+        std::cout << "Some error in loadProb_editDistance function" << '\n';
+      }
+    }
+  }
+}
 //function to load confusions
 void loadNewConfusions(string& left_str, vector< pair <int, string> >& v_editDistance ,map<string,int>& lw_ConfPmap){
   vector<string> lw_ConfP;
@@ -98,14 +120,13 @@ float totalFreq;
 void mapProbability (map<string,int>& m3, map<string, float>& m4, float totalFreq) {
 
 for( map<string,int>::const_iterator eptr=m3.begin(); eptr!=m3.end(); eptr++)
-      {
-      m4[(eptr->first)]= (float)(eptr->second)/totalFreq;
-      }
-
-for( map<string,float>::const_iterator eptr=m4.begin(); eptr!=m4.end(); eptr++)
-      {
-         cout <<"(" << (eptr->first) << " " <<(eptr->second)<<")" << "   ";
-      }
+  {
+   m4[(eptr->first)]= (float)(eptr->second)/totalFreq;
+  }
+//for( map<string,float>::const_iterator eptr=m4.begin(); eptr!=m4.end(); eptr++)
+//      {
+//         cout <<"(" << (eptr->first) << " " <<(eptr->second)<<")" << "   ";
+//      }
 }
 
 //main function
@@ -132,6 +153,7 @@ else{
 totalFreqDict = load_totalFreq(dict_map);
 //std::cout << totalFreqDict << '\n';
 //std::cout << 1/totalFreqDict << '\n';
+mapProbability(ConfPmap1, mProb_dict, totalFreqDict);
 
 //for confusions.h file. Load confusions from train pairs
 loadConfusions("/Users/vaibhavagrawal/Desktop/OCR word correction/Data/TrainPairs.txt",ConfPmap1);
