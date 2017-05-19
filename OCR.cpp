@@ -22,14 +22,14 @@ with respect to the train pairs' confusions
 */
 void loadProb_editDistance(map<string,int>& lw_map, map<string,float>& tp_map, float totalP ){
   for (map<string,int>::const_iterator i=lw_map.begin(); i!=lw_map.end(); i++) {
-    for( map<string,float>::const_iterator j=tp_map.begin(); j!=tp_map.end(); j++ ){
+    for( map<string,float>::const_iterator j=tp_map.begin(); j!=tp_map.end(); j++ ) {
 
       if ((j->first).compare((i->first)) == 0) {
         // lw_m2[(i->first)]= (j->second);
         totalP *= (j->second);
       }
       else{
-        std::cout << "Some error in loadProb_editDistance function" << '\n';
+        cout << "Confusions do not match with any of the them in the train pairs" << endl;
       }
     }
   }
