@@ -95,16 +95,21 @@ float load_totalFreq(map<string, int>& m2){
     return totalFreq;
 }
 
-void mapProbability (map<string,int>& m3, vector<float> v, float totalFreq) {
+void vecProbability (map<string,int>& m3, vector<float> v, float totalFreq) {
+
   for( map<string,int>::const_iterator eptr=m3.begin(); eptr!=m3.end(); eptr++)
         {
           v.push_back((float)(eptr->second)/totalFreq);
         }
+  //for (vector<float>::const_iterator i = v.begin(); i != v.end(); ++i)
+  //cout << *i << ' '<< endl;
+
 }
 
 //main function
 int main () {
   map<string, int> dict_map, confusion_map, sandhi_map;
+  vector<float> vProb_dict, vProb_confusion;
   string word, line;
   int freq_word;
   float totalFreqDict = 0, totalFreqConfusion= 0;
@@ -132,6 +137,8 @@ int main () {
  totalFreqConfusion = load_totalFreq(ConfPmap1);
  //std::cout << 1/totalFreqConfusion << '\n';
  //printmapWFreq(ConfPmap1);
+
+ //vecProbability(ConfPmap1, vProb_confusion, totalFreqConfusion);
 
  string ocrWord, correctWord; //Incorrect word in SLP1 format
  correctWord = ocrword_to_correctword(ocrWord, dict);
