@@ -68,7 +68,7 @@ string ocrword_to_correctword(string &incorrect_word, ifstream &dict)
     return incorrect_word;
   }else{
       flag = 0;
-      for (size_t i = 0; i <= strlen(incorrect_word.c_str()); i++) {
+      for (size_t i = 2; i <= strlen(incorrect_word.c_str()); i++) {
           left_word = incorrect_word.substr(0,i);
           right_word = incorrect_word.substr(i, strlen(incorrect_word.c_str()));
 
@@ -89,15 +89,23 @@ string ocrword_to_correctword(string &incorrect_word, ifstream &dict)
    }
 }
 
+float load_totalFreq(map<string, int>& m2){
+  float totalFreq;
+    for( map<string,int>::const_iterator eptr=m2.begin(); eptr!=m2.end(); eptr++)
+          {
+            totalFreq += (eptr->second);
+          }
+    return totalFreq;
+}
 
 //main function
 int main () {
   map<string, int> dict_map, confusion_map, sandhi_map;
   string word, line;
   int freq_word;
-  float totalFreq_Dict = 0;
+  float totalFreqDict = 0, totalFreqConfusion= 0;
   //dictionary file
-  std::ifstream dict("Data/Dict.txt");
+  std::ifstream dict("/Users/vaibhavagrawal/Desktop/OCR word correction/Data/Dict.txt");
 
   if (dict.is_open())
   {
@@ -110,22 +118,15 @@ int main () {
   else{
     std::cout << "file is not open" << '\n';
   }
-
-  for( map<string,int>::const_iterator eptr=dict_map.begin(); eptr!=dict_map.end(); eptr++)
-        {
-          totalFreq_Dict += (eptr->second) ;
-        }
-        std::cout << totalFreq_Dict << '\n';
-        std::cout << 1/totalFreq_Dict << '\n';
-/*
- *printing map of dictionary
- * for (std::map<string,int>::iterator it=dict_map.begin(); it!=dict_map.end(); ++it)
- * std::cout << it->first << " => " << it->second << '\n';
- */
+  totalFreqDict = load_totalFreq(dict_map);
+  std::cout << totalFreqDict << '\n';
+  std::cout << 1/totalFreqDict << '\n';
 
  //for confusions.h file. Load confusions from train pairs
  map<string, int> ConfPmap1;
- //loadConfusions("DataForVaibhav/TrainPairs.txt",ConfPmap1);
+ loadConfusions("DataForVaibhav/TrainPairs.txt",ConfPmap1);
+ totalFreqConfusion = load_totalFreq(ConfPmap1);
+  std::cout << totalFreqConfusion << '\n';
  //printmapWFreq(ConfPmap1);
 
  string ocrWord, correctWord; //Incorrect word in SLP1 format
