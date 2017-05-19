@@ -1,0 +1,35 @@
+from ocr function
+rAg   rAk
+      rAm
+      rAn
+      rAs
+      .
+      .
+      .
+      top 10 edit distances
+/-----------------------------/
+Load confusions from loadNewConfusions functions
+g k
+g m
+g n
+g s
+.
+.
+.
+.
+for top 10 edit distances
+/-----------------------------/
+/-----/
+we r now having the probability map of the confusions from train pairs
+now we have to find the corresponding probability of the confusions of the pairs taken from top 10 edit distances
+/----/
+we r having a map with confusions of rAg and the other string from top 10 edit distances
+
+we r having confusions, eg: g -> k
+now we have to find the probability of the confusions
+
+for each confusions estimated from top 10 edit distances find probability from confusion map of train pairs.
+
+in our program all the map are of the form map <string, int>
+ConfPmap1 = confusions from train pairs stored
+lw_ConfPmap = map storing confusions from top 10 edit distances
