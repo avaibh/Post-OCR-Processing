@@ -12,10 +12,6 @@
 #include "confusions.h"
 using namespace std;
 
-/*
-    MAKE A FUNCTION TO FIND PROBABILITY OF TOP 10 EDIT DISTANCES BY COMPARING WITH COMFUSION MAP OF TRAIN PAIRS
-*/
-
 //function to load confusions
 void loadNewConfusions(string& left_str, vector< pair <int, string> >& v_editDistance ,map<string,int>& lw_ConfPmap){
     vector<string> lw_ConfP;
@@ -97,6 +93,13 @@ float load_totalFreq(map<string, int>& m2){
             totalFreq += (eptr->second);
           }
     return totalFreq;
+}
+
+void mapProbability (map<string,int>& m3, vector<float> v, float totalFreq) {
+  for( map<string,int>::const_iterator eptr=m3.begin(); eptr!=m3.end(); eptr++)
+        {
+          v.push_back((float)(eptr->second)/totalFreq);
+        }
 }
 
 //main function
