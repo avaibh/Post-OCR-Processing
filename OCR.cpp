@@ -41,9 +41,6 @@ void loadNewConfusions(string& left_str, vector< pair <int, string> >& v_editDis
   string str1, str2;
   int edit_Distance;
   str1 = left_str;
-
-  map< string, map<string, float> > mainMap; // Main map can be accessed as
-                                             // mainMap[string1][string2] = "float Value";
   map<string, float> inner;
 
   for( vector< pair <int, string> >::const_iterator eptr=v_editDistance.begin(); eptr!=v_editDistance.end(); eptr++)
@@ -58,10 +55,8 @@ void loadNewConfusions(string& left_str, vector< pair <int, string> >& v_editDis
       //cout << str1 << " " << str2 << endl;
       //vec.clear();
      }
-
      //std::cout << "new confusions loop enetered " << '\n';
-
-  //loadvectomap(lw_ConfP,lw_ConfPmap);
+     //loadvectomap(lw_ConfP,lw_ConfPmap);
 }/*
 void loadNewConfusions(string& left_str, vector< pair <int, string> >& v_editDistance ,map<string,int>& lw_ConfPmap){
   vector<string> lw_ConfP;
@@ -102,7 +97,8 @@ string ocrword_to_correctword(string &incorrect_word, ifstream &dict, map<string
 {
   vector< pair <int, string> > v_editDistance;
   string left_word, right_word, line, word, correctWord;
-  map<string,int> lw_ConfPmap;
+  map< string, map<string, float> > lw_ConfPmap; // Main map can be accessed as
+                                                 // mainMap[string1][string2] = "float Value";
   float totalProb=1;
   int flag = 0;
 
