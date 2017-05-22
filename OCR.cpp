@@ -29,7 +29,7 @@ void loadProb_editDistance(map<string,int>& lw_map, map<string,float>& tp_map, f
         totalP *= (j->second);
       }
       else{
-        cout << "Confusions do not match with any of the them in the train pairs" << endl;
+        cout << "Confusions do not match from that in the train pairs" << endl;
       }
     }
   }
