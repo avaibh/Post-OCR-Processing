@@ -8,6 +8,8 @@
 #include <algorithm> //for using sorting algorithm
 #include <map>
 #include <unordered_map>
+#include <iterator>
+#include <utility>
 #include "editDistance.h"
 #include "confusions.h"
 using namespace std;
@@ -40,6 +42,33 @@ void loadNewConfusions(string& left_str, vector< pair <int, string> >& v_editDis
   int edit_Distance;
   str1 = left_str;
 
+  map< string, map<string, float> > mainMap; // Main map can be accessed as
+                                             // mainMap[string1][string2] = "float Value";
+  map<string, float> inner;
+
+  for( vector< pair <int, string> >::const_iterator eptr=v_editDistance.begin(); eptr!=v_editDistance.end(); eptr++)
+     {
+      edit_Distance = eptr->first;
+      str2 = eptr->second ;
+      appendConfusionsPairs((str1),(str2),lw_ConfP);//toslp1
+      for(size_t t = 0; t< lw_ConfP.size(); t++) {
+        inner[lw_ConfP[t]] = 1;
+      }
+      mainMap.insert(make_pair(str2,inner));
+      //cout << str1 << " " << str2 << endl;
+      //vec.clear();
+     }
+
+     //std::cout << "new confusions loop enetered " << '\n';
+
+  //loadvectomap(lw_ConfP,lw_ConfPmap);
+}/*
+void loadNewConfusions(string& left_str, vector< pair <int, string> >& v_editDistance ,map<string,int>& lw_ConfPmap){
+  vector<string> lw_ConfP;
+  string str1, str2;
+  int edit_Distance;
+  str1 = left_str;
+
   for( vector< pair <int, string> >::const_iterator eptr=v_editDistance.begin(); eptr!=v_editDistance.end(); eptr++)
      {
       edit_Distance = eptr->first;
@@ -52,7 +81,7 @@ void loadNewConfusions(string& left_str, vector< pair <int, string> >& v_editDis
 
   loadvectomap(lw_ConfP,lw_ConfPmap);
 }
-
+*/
 //function that takes dictionary and the left_word and return the top 10 edit distance as a vector
 void load_editDistance(ifstream& dict, string& left_str,vector< pair <int, string> > v_editDistance)
 {
