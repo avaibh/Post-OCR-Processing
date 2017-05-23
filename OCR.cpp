@@ -14,7 +14,6 @@
 #include "confusions.h"
 // #include "newConfusions.h"
 using namespace std;
-
 /*
 Legends:
 lw = left_word
@@ -25,65 +24,63 @@ Cmap = Confusion Map
 /*
   New findConfusions function
 */
-
 vector<string> findNewConfusions(string ocr, string correct, vector<string>& vec){
-
-    vector<string> v;
-    size_t sz = ocr.size();
-    string ocrp = "";
-    size_t t = 0;
-    while(1){
-        string ocrn = "";
-        string correctn = "";
-        string s1 = ocr.substr(t,1), s2 = correct.substr(t,1);
-        //cout << "t = " << t << " " << sz << endl;
-        // deletion
-        if(s2 == " ") {
-            while(s1 != s2) {ocrn += s1; correctn += s2; t++;  if(t >= sz) break; s1 = ocr.substr(t,1); s2 = correct.substr(t,1);}
-            if(ocrp != "") {
-              vec.push_back(removeSpaces(ocrp+ocrn) + " " + removeSpaces(ocrp+correctn));
-              v.push_back(removeSpaces(ocrp+ocrn) + " " + removeSpaces(ocrp+correctn));
+  vector<string> v;
+  size_t sz = ocr.size();
+  string ocrp = "";
+  size_t t = 0;
+  while(1){
+      string ocrn = "";
+      string correctn = "";
+      string s1 = ocr.substr(t,1), s2 = correct.substr(t,1);
+      //cout << "t = " << t << " " << sz << endl;
+      // deletion
+      if(s2 == " ") {
+          while(s1 != s2) {ocrn += s1; correctn += s2; t++;  if(t >= sz) break; s1 = ocr.substr(t,1); s2 = correct.substr(t,1);}
+          if(ocrp != "") {
+            vec.push_back(removeSpaces(ocrp+ocrn) + " " + removeSpaces(ocrp+correctn));
+            v.push_back(removeSpaces(ocrp+ocrn) + " " + removeSpaces(ocrp+correctn));
+        }
+          else if(t < sz) {
+            vec.push_back(removeSpaces(ocrn + s1) + " " + removeSpaces(correctn + s1));
+            v.push_back(removeSpaces(ocrn + s1) + " " + removeSpaces(correctn + s1));
           }
-            else if(t < sz) {
-              vec.push_back(removeSpaces(ocrn + s1) + " " + removeSpaces(correctn + s1));
-              v.push_back(removeSpaces(ocrn + s1) + " " + removeSpaces(correctn + s1));
-            }
+          else {
+            vec.push_back(removeSpaces(ocrn) + " " + removeSpaces(correctn));
+            v.push_back(removeSpaces(ocrn) + " " + removeSpaces(correctn));
+        }
+      }
+      // addition
+      else if(s1 == " ") {
+          while(s1 != s2) {ocrn += s1; correctn += s2; t++;  if(t >= sz) break; s1 = ocr.substr(t,1); s2 = correct.substr(t,1);}
+          if((ocrp != "")&&(isNonVowel(ocrp))) {
+            vec.push_back(removeSpaces(ocrp+ocrn) + " " + removeSpaces(ocrp+correctn));
+            v.push_back(removeSpaces(ocrp+ocrn) + " " + removeSpaces(ocrp+correctn));
+          }
+          else if(t < sz) {
+            vec.push_back(removeSpaces(ocrn + s1) + " " + removeSpaces(correctn + s1));
+            v.push_back(removeSpaces(ocrn + s1) + " " + removeSpaces(correctn + s1));
+        }
+          else {
+            vec.push_back(removeSpaces(ocrn) + " " + removeSpaces(correctn));
+            v.push_back(removeSpaces(ocrn) + " " + removeSpaces(correctn));
+          }
+      }
+      else if(s1 != s2) {
+          while(s1 != s2) {ocrn += s1; correctn += s2; t++;  if(t >= sz) break; s1 = ocr.substr(t,1); s2 = correct.substr(t,1);}
+          if((ocrp != "")&&(isNonVowel(ocrp))) {
+            vec.push_back(removeSpaces(ocrp+ocrn) + " " + removeSpaces(ocrp+correctn));/*else if(t < sz) cout << "s " << ocrn + s1 << " " << correctn + s1<< endl;*/
+            v.push_back(removeSpaces(ocrp+ocrn) + " " + removeSpaces(ocrp+correctn));
+          }
             else {
               vec.push_back(removeSpaces(ocrn) + " " + removeSpaces(correctn));
               v.push_back(removeSpaces(ocrn) + " " + removeSpaces(correctn));
-          }
-        }
-        // addition
-        else if(s1 == " ") {
-            while(s1 != s2) {ocrn += s1; correctn += s2; t++;  if(t >= sz) break; s1 = ocr.substr(t,1); s2 = correct.substr(t,1);}
-            if((ocrp != "")&&(isNonVowel(ocrp))) {
-              vec.push_back(removeSpaces(ocrp+ocrn) + " " + removeSpaces(ocrp+correctn));
-              v.push_back(removeSpaces(ocrp+ocrn) + " " + removeSpaces(ocrp+correctn));
             }
-            else if(t < sz) {
-              vec.push_back(removeSpaces(ocrn + s1) + " " + removeSpaces(correctn + s1));
-              v.push_back(removeSpaces(ocrn + s1) + " " + removeSpaces(correctn + s1));
-          }
-            else {
-              vec.push_back(removeSpaces(ocrn) + " " + removeSpaces(correctn));
-              v.push_back(removeSpaces(ocrn) + " " + removeSpaces(correctn));
-            }
-        }
-        else if(s1 != s2) {
-            while(s1 != s2) {ocrn += s1; correctn += s2; t++;  if(t >= sz) break; s1 = ocr.substr(t,1); s2 = correct.substr(t,1);}
-            if((ocrp != "")&&(isNonVowel(ocrp))) {
-              vec.push_back(removeSpaces(ocrp+ocrn) + " " + removeSpaces(ocrp+correctn));/*else if(t < sz) cout << "s " << ocrn + s1 << " " << correctn + s1<< endl;*/
-              v.push_back(removeSpaces(ocrp+ocrn) + " " + removeSpaces(ocrp+correctn));
-            }
-              else {
-                vec.push_back(removeSpaces(ocrn) + " " + removeSpaces(correctn));
-                v.push_back(removeSpaces(ocrn) + " " + removeSpaces(correctn));
-              }
-        } else t++;
+      } else t++;
 
-        ocrp = s1;
-        if(t >= sz) break;
-    }
+      ocrp = s1;
+      if(t >= sz) break;
+}
 return v;
 }
 void appendNewConfusionsPairs(string str1, string str2, vector<string>& vec, vector<string>& vec1){
@@ -143,12 +140,14 @@ void loadNewConfusions(string& left_str, vector< pair <int, string> >& v_editDis
 /*
   Funcition that computes total probabilityof the incorrect_word in recursion
 */
-void computeProb(float totalProb, map< string, map<string, float> >& m1, std::map<string, float> finalMap) {
+void computeProbMap(map< string, map<string, float> >& m1, std::map<string, float> finalMap) {
+
+  float prob = 1;
   for (map< string, map<string, float> >::const_iterator i=m1.begin(); i!=m1.end(); i++) {
     for( map<string,float>::const_iterator j=i->second.begin();j!=i->second.end(); j++){
-            totalProb *= m1[(i->first)][(j->first)];
+            prob *= m1[(i->first)][(j->first)];
     }
-    finalMap[(i->first)] = totalProb ;
+    finalMap[(i->first)] = prob ;
   }
 }
 
@@ -171,7 +170,7 @@ A Funtion that finds the corresponding probability for the confusions of the pai
 with respect to the train pairs' confusions
 */
 
-void loadProbMap(map< string, map<string, float> >& lw_map, map<string,float>& tp_Cmap1){
+void loadProbMap(map<string,float>& tp_Cmap1, map< string, map<string, float> >& lw_map){
   for (map< string, map<string, float> >::const_iterator eptr=lw_map.begin(); eptr!=lw_map.end(); eptr++) {
     for( map<string,float>::const_iterator i=eptr->second.begin();i!=eptr->second.end(); i++){
       for( map<string,float>::const_iterator j=tp_Cmap1.begin(); j!=tp_Cmap1.end(); j++ ) {
@@ -189,15 +188,22 @@ void loadProbMap(map< string, map<string, float> >& lw_map, map<string,float>& t
     }
   }
 }
+void maxProb(map<string, float> m1, map<string, float> m2, map<string, float> fm){
+
+  for (map< string, map<string, float> >::const_iterator i=m1.begin(); i!=m1.end(); i++) {
+    for (map< string, map<string, float> >::const_iterator j=m2.begin(); j!=m2.end(); j++) {
+    }
+  }
+
+}
 //Recursive function
 string ocrword_to_correctword(string &incorrect_word, ifstream &dict, map<string,float>& tp_Cmap)
 {
-  vector< pair <int, string> > v_editDistance;
+  vector< pair <int, string> > lv_editDistance, rv_editDistance;
   string left_word, right_word, line, word, correctWord;
-  map< string, map<string, float> > lw_ConfPmap; // Main map can be accessed as
+  map< string, map<string, float> > lw_ConfPmap, rw_ConfPmap; // Main map can be accessed as
                                                  // mainMap[string1][string2] = "float Value";
-  map<string, float> finalMap;
-  float totalProb=1;
+  map<string, float> l_finalMap, r_finalMap;
   int flag = 0;
 
   while (getline(dict, line)){
@@ -224,10 +230,17 @@ string ocrword_to_correctword(string &incorrect_word, ifstream &dict, map<string
       if (flag == 1) {
         ocrword_to_correctword(right_word, dict, tp_Cmap);
       }else {
-      load_editDistance(dict, left_word, v_editDistance);
-      loadNewConfusions(left_word, v_editDistance, lw_ConfPmap);
-      loadProbMap(lw_ConfPmap, tp_Cmap);
-      computeProb(totalProb, lw_ConfPmap, finalMap);
+        // for ledt word
+      load_editDistance(dict, left_word, lv_editDistance);
+      loadNewConfusions(left_word, lv_editDistance, lw_ConfPmap);
+      loadProbMap(tp_Cmap, lw_ConfPmap);
+      computeProbMap(lw_ConfPmap, l_finalMap);
+
+      // for right word
+      load_editDistance(dict, right_word, rv_editDistance);
+      loadNewConfusions(right_word, rv_editDistance, rw_ConfPmap);
+      loadProbMap(tp_Cmap, rw_ConfPmap);
+      computeProbMap(rw_ConfPmap, r_finalMap);
       }
   }
 }
