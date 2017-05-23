@@ -188,14 +188,39 @@ void loadProbMap(map<string,float>& tp_Cmap1, map< string, map<string, float> >&
     }
   }
 }
-void maxProb(map<string, float> m1, map<string, float> m2, map<string, float> fm){
+void maxProb(map<string, float>& m1, map<string, float>& m2, map< map<string, string>, float>& fm){
+  float maxProb = 0, tempProb;
+  string localStr1, localStr2;
 
-  for (map< string, map<string, float> >::const_iterator i=m1.begin(); i!=m1.end(); i++) {
-    for (map< string, map<string, float> >::const_iterator j=m2.begin(); j!=m2.end(); j++) {
+  for (map<string, float>::const_iterator i=m1.begin(); i!=m1.end(); i++) {
+    for (map<string, float>::const_iterator j=m2.begin(); j!=m2.end(); j++) {
+      tempProb = (i->second)*(j->second);
+      if (tempProb > maxProb) {
+        maxProb = tempProb;
+        localStr1 = (i->first) ;
+        localStr2 = (j->first) ;
+      }else{
+        tempProb = 0;
+      }
     }
   }
-
+      fm[localStr1][localStr2] = maxProb;
 }
+/*
+void compCorrectWord(map< map<string, string>, float>& map, string cw){
+  float maxProb = 0, tempProb;
+for (map< map<string, string>, float>::const_iterator eptr=map.begin(); eptr!=map.end(); eptr++) {
+  for (map<string, string>::const_iterator i=eptr->first.begin();i!=eptr->first.end(); i++) {
+      tempProb = (eptr->second);
+      if (tempProb > maxProb) {
+        cw = (i->first) + (i->second);
+      }else{
+        tempProb = 0;
+      }
+    }
+}
+}
+*/
 //Recursive function
 string ocrword_to_correctword(string &incorrect_word, ifstream &dict, map<string,float>& tp_Cmap)
 {
@@ -203,6 +228,7 @@ string ocrword_to_correctword(string &incorrect_word, ifstream &dict, map<string
   string left_word, right_word, line, word, correctWord;
   map< string, map<string, float> > lw_ConfPmap, rw_ConfPmap; // Main map can be accessed as
                                                  // mainMap[string1][string2] = "float Value";
+  map< map<string, string>, float> maxProbMap;
   map<string, float> l_finalMap, r_finalMap;
   int flag = 0;
 
@@ -230,7 +256,7 @@ string ocrword_to_correctword(string &incorrect_word, ifstream &dict, map<string
       if (flag == 1) {
         ocrword_to_correctword(right_word, dict, tp_Cmap);
       }else {
-        // for ledt word
+      // for ledt word
       load_editDistance(dict, left_word, lv_editDistance);
       loadNewConfusions(left_word, lv_editDistance, lw_ConfPmap);
       loadProbMap(tp_Cmap, lw_ConfPmap);
@@ -241,8 +267,13 @@ string ocrword_to_correctword(string &incorrect_word, ifstream &dict, map<string
       loadNewConfusions(right_word, rv_editDistance, rw_ConfPmap);
       loadProbMap(tp_Cmap, rw_ConfPmap);
       computeProbMap(rw_ConfPmap, r_finalMap);
+
+      maxProb(l_finalMap, r_finalMap, maxProbMap);
       }
   }
+// find the correct word from the max prob map
+compCorrectWord(maxProbMap, correctWord);
+
 }
 return correctWord;
 }
