@@ -152,9 +152,10 @@ void computeProbMap(map< string, map<string, float> >& m1, std::map<string, floa
 }
 
 //function that takes dictionary and the left_word and return the top 10 edit distance as a vector
-void load_editDistance(ifstream& dict, string& left_str,vector< pair <int, string> > v_editDistance)
+void load_editDistance(string fileName1, string& left_str,vector< pair <int, string> > v_editDistance)
 {
   string line, word;
+  ifstream dict(fileName1);
   while (getline(dict, line)){
       dict >> word;
       v_editDistance.push_back( make_pair ( editDistance(word,left_str), word ) );
@@ -210,7 +211,7 @@ void load_maxProb(map<string, float>& m1, map<string, float>& m2, map< float, ma
 
 }
 
-void compCorrectWord(map< float, map<string, string> >& m, string cw){
+void compCorrectWord(map< float, map<string, string> >& m, string& cw){
   float maxProb = 0, tempProb;
 
   for (map<float, map<string, string> >::const_iterator a = m.begin(); a != m.end(); a++) {
@@ -226,7 +227,7 @@ void compCorrectWord(map< float, map<string, string> >& m, string cw){
 }
 
 //Recursive function
-string ocrword_to_correctword(string &incorrect_word, ifstream &dict, map<string,float>& tp_Cmap)
+string ocrword_to_correctword(string &incorrect_word, string fileName, map<string,float>& tp_Cmap)
 {
   vector< pair <int, string> > lv_editDistance, rv_editDistance;
   string left_word, right_word, line, word, correctWord;
@@ -235,49 +236,57 @@ string ocrword_to_correctword(string &incorrect_word, ifstream &dict, map<string
   map< float, map<string, string> > maxProbMap;
   map<string, float> l_finalMap, r_finalMap;
   int flag = 0;
+  ifstream dict(fileName);
 
+  if (dict.is_open()) {
   while (getline(dict, line)){
     dict >> word;
-    if (incorrect_word.compare(word) == 0) flag = 1; else flag =0;
+    //std::cout << word << '\n';
+    if (incorrect_word.compare(word) == 0) flag = 1;
+    else flag =0;
   }
-
+  // std::cout << flag << '\n';
   if (flag == 1) { //if incorrect_word is in dictionary
     return incorrect_word;
   }else{
   flag = 0;
-  for (size_t i = 2; i <= strlen(incorrect_word.c_str()); i++) {
+  for (size_t i = 0; i <= strlen(incorrect_word.c_str()); i++) {
     left_word = incorrect_word.substr(0,i);
     right_word = incorrect_word.substr(i, strlen(incorrect_word.c_str()));
-
+    // std::cout << left_word<< '+' << right_word << '=' + incorrect_word << '\n';
+    ifstream dict(fileName);
     while (getline(dict, line)) {
       dict >> word;
       if ( left_word.compare(word) == 0 ) {
-      //std::cout << "I'm in left_word == word if " << '\n';
+      //   std::cout << "I'm in left_word == word if " << '\n';
       flag = 1;
-      //  return a string to main
+        //  return a string to main
       }else flag =0;
       }
       if (flag == 1) {
-        ocrword_to_correctword(right_word, dict, tp_Cmap);
+        ocrword_to_correctword(right_word, fileName, tp_Cmap);
+        //std::cout << "/* message */" << '\n';
       }else {
-      // for ledt word
-      load_editDistance(dict, left_word, lv_editDistance);
-      loadNewConfusions(left_word, lv_editDistance, lw_ConfPmap);
-      loadProbMap(tp_Cmap, lw_ConfPmap);
-      computeProbMap(lw_ConfPmap, l_finalMap);
+        // for ledt word
+        load_editDistance(fileName, left_word, lv_editDistance);
+        loadNewConfusions(left_word, lv_editDistance, lw_ConfPmap);
+        loadProbMap(tp_Cmap, lw_ConfPmap);
+        computeProbMap(lw_ConfPmap, l_finalMap);
 
-      // for right word
-      load_editDistance(dict, right_word, rv_editDistance);
-      loadNewConfusions(right_word, rv_editDistance, rw_ConfPmap);
-      loadProbMap(tp_Cmap, rw_ConfPmap);
-      computeProbMap(rw_ConfPmap, r_finalMap);
-
-      load_maxProb(l_finalMap, r_finalMap, maxProbMap);
+        // for right word
+        load_editDistance(fileName, right_word, rv_editDistance);
+        loadNewConfusions(right_word, rv_editDistance, rw_ConfPmap);
+        loadProbMap(tp_Cmap, rw_ConfPmap);
+        computeProbMap(rw_ConfPmap, r_finalMap);
+        // std::cout << "/* message1 */" << '\n';
+        load_maxProb(l_finalMap, r_finalMap, maxProbMap);
       }
   }
 // find the correct word from the max prob map
 compCorrectWord(maxProbMap, correctWord);
-
+}
+}else{
+  std::cout << "file is not open" << '\n';
 }
 return correctWord;
 }
@@ -319,6 +328,7 @@ if (dict.is_open())
   while (getline(dict, line))
   {
     dict >> word;
+    //std::cout << word << '\n';
     dict_map[word]++;
   }
 }
@@ -338,9 +348,10 @@ totalFreqConfusion = load_totalFreq(ConfPmap1);
 
 mapProbability(ConfPmap1, mProb_confusion, totalFreqConfusion);
 
-string ocrWord, correctWord; //Incorrect word in SLP1 format
-correctWord = ocrword_to_correctword(ocrWord, dict, mProb_confusion);
-std::cout << correctWord << endl;
+string ocrWord, correctWord1; //Incorrect word in SLP1 format
+ocrWord = "rAgeSbaram";
+correctWord1 = ocrword_to_correctword(ocrWord, "Data/Dict.txt", mProb_confusion);
+std::cout << correctWord1 << endl;
 /*
 //confusion file
 size_t totalFreq_confusion = 0;
