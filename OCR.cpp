@@ -171,6 +171,7 @@ with respect to the train pairs' confusions
 */
 
 void loadProbMap(map<string,float>& tp_Cmap1, map< string, map<string, float> >& lw_map){
+
   for (map< string, map<string, float> >::const_iterator eptr=lw_map.begin(); eptr!=lw_map.end(); eptr++) {
     for( map<string,float>::const_iterator i=eptr->second.begin();i!=eptr->second.end(); i++){
       for( map<string,float>::const_iterator j=tp_Cmap1.begin(); j!=tp_Cmap1.end(); j++ ) {
@@ -188,7 +189,7 @@ void loadProbMap(map<string,float>& tp_Cmap1, map< string, map<string, float> >&
     }
   }
 }
-void maxProb(map<string, float>& m1, map<string, float>& m2, map< map<string, string>, float>& fm){
+void load_maxProb(map<string, float>& m1, map<string, float>& m2, map< float, map<string, string> >& fm){
   float maxProb = 0, tempProb;
   string localStr1, localStr2;
 
@@ -204,23 +205,26 @@ void maxProb(map<string, float>& m1, map<string, float>& m2, map< map<string, st
       }
     }
   }
-      fm[localStr1][localStr2] = maxProb;
+ //fm[localStr1][localStr2] = maxProb;
+ fm[maxProb][localStr1]=localStr2;
+
 }
-/*
-void compCorrectWord(map< map<string, string>, float>& map, string cw){
+
+void compCorrectWord(map< float, map<string, string> >& m, string cw){
   float maxProb = 0, tempProb;
-for (map< map<string, string>, float>::const_iterator eptr=map.begin(); eptr!=map.end(); eptr++) {
-  for (map<string, string>::const_iterator i=eptr->first.begin();i!=eptr->first.end(); i++) {
-      tempProb = (eptr->second);
+
+  for (map<float, map<string, string> >::const_iterator a = m.begin(); a != m.end(); a++) {
+    for (map< std::string, std::string >::const_iterator b = (a->second).begin(); b != (a->second).end(); b++) {
+      tempProb = (a->first);
       if (tempProb > maxProb) {
-        cw = (i->first) + (i->second);
+        cw = (b->first) + (b->second);
       }else{
         tempProb = 0;
       }
     }
+  }
 }
-}
-*/
+
 //Recursive function
 string ocrword_to_correctword(string &incorrect_word, ifstream &dict, map<string,float>& tp_Cmap)
 {
@@ -228,7 +232,7 @@ string ocrword_to_correctword(string &incorrect_word, ifstream &dict, map<string
   string left_word, right_word, line, word, correctWord;
   map< string, map<string, float> > lw_ConfPmap, rw_ConfPmap; // Main map can be accessed as
                                                  // mainMap[string1][string2] = "float Value";
-  map< map<string, string>, float> maxProbMap;
+  map< float, map<string, string> > maxProbMap;
   map<string, float> l_finalMap, r_finalMap;
   int flag = 0;
 
@@ -268,7 +272,7 @@ string ocrword_to_correctword(string &incorrect_word, ifstream &dict, map<string
       loadProbMap(tp_Cmap, rw_ConfPmap);
       computeProbMap(rw_ConfPmap, r_finalMap);
 
-      maxProb(l_finalMap, r_finalMap, maxProbMap);
+      load_maxProb(l_finalMap, r_finalMap, maxProbMap);
       }
   }
 // find the correct word from the max prob map
