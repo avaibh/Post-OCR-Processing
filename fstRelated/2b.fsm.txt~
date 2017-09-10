@@ -1,0 +1,34 @@
+2 3 <eps> <eps> 0
+3 4 b <eps> 0
+3 4 d <eps> 0
+4 5 a <eps> 0
+5 6 d <eps> 0
+2 7 <eps> <eps> 0
+7 8 b <eps> 0
+7 8 d <eps> 0
+8 4 e <eps> 0
+6 0
+2 9 <eps> <eps> 0
+9 10 c <eps> 0
+10 11 a <eps> 0
+11 12 b <eps> 0
+12 0
+2 13 <eps> <eps> 0
+13 14 c <eps> 0
+14 15 e <eps> 0
+15 16 d <eps> 0
+16 17 e <eps> 0
+2 18 <eps> <eps> 0
+18 19 a <eps> 0
+19 13 c <eps> 0
+19 20 d <eps> 0
+20 21 d <eps> 0
+21 22 e <eps> 0
+22 23 d <eps> 0
+23 0
+2 24 <eps> <eps> 0
+24 25 d <eps> 0
+25 26 e <eps> 0
+26 27 c <eps> 0
+27 15 a <eps> 0
+17

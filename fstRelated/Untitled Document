@@ -1,0 +1,4 @@
+Three situations may arise for any i:-
+\newline (i) $v_j = vmax1_{t-1}$, in such case if $p vmax1_{t-1} \> q  vmax2_{t-1}$, the jth term will dominate, else the term(i) corresponding to $v_{t-1}(i) = vmax2_{t-1}$ will dominate.
+\newline (ii) $v_j = vmax2_{t-1}$, in such case if $p vmax2_{t-1} \> q  vmax1_{t-1}$, the jth term will dominate, else the term(i) corresponding to $v_{t-1}(i) = vmax1_{t-1}$ will dominate.
+\newline (iii) $v_j is neither vmax1{t-1} nor vmax2{t-1}$, in such case if $p v_{t-1}(j) \> q  vmax1_{t-1}$, the jth term will dominate, else the term(i) corresponding to $v_{t-1}(i) = vmax1_{t-1}$ will dominate.
