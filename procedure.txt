@@ -1,3 +1,4 @@
+/-----------------------------/
 from ocr function
 rAg   rAk
       rAm
@@ -20,7 +21,7 @@ g s
 for top 10 edit distances
 /-----------------------------/
 /-----/
-we r now having the probability map of the confusions from train pairs
+we r now having the probability map of the confusions from train pairs (done @ 3:22 p.m. 19 May 2017)
 now we have to find the corresponding probability of the confusions of the pairs taken from top 10 edit distances
 /----/
 we r having a map with confusions of rAg and the other string from top 10 edit distances
@@ -33,3 +34,11 @@ for each confusions estimated from top 10 edit distances find probability from c
 in our program all the map are of the form map <string, int>
 ConfPmap1 = confusions from train pairs stored
 lw_ConfPmap = map storing confusions from top 10 edit distances
+
+
+/--------------/
+On monday:
+think where to we have to call the loadProb_editDistance function and how do we have to use it.....
+think upon what does rohit sir mean when he said to add 1 to each frequency and I'm not sure what did he meant
+work on probability and sandhi
+/--------------/
