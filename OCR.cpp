@@ -353,7 +353,7 @@ ocrWord = "rAgeSbaram";
 correctWord1 = ocrword_to_correctword(ocrWord, "Data/Dict.txt", mProb_confusion);
 std::cout << correctWord1 << endl;
 /*
-//confusion file
+confusion file
 size_t totalFreq_confusion = 0;
 std::ifstream confusion("confusion.txt");
 
